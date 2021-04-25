@@ -109,38 +109,59 @@ int main()
 void ReadFile(string& name, string& X, vector<FD>& F)
 {
 	ifstream In(name);
+	if (!In) {
+		cout << "‘айл не найден!";
+		exit(-1);
+	}
 	In >> X; //считываем множество атрибутов до \n
 	X.shrink_to_fit();
 	FD Func("", "");
 	string input_1 = "";
 	string input_2 = "";
 	char ch = 0;
-	while (!In.eof())
-	{
+	cout << "—читал из файла:\n";
+	while (!In.eof()) {
 		input_1 = "";
 		input_2 = "";
 		ch = 0;
-		while (true)
-		{
+		while (true) {
 			In >> ch;
 			if (ch == '-')
 				break;
 			input_1 += ch;
-			if (ch == '0')
+			if (ch == '0' and In.eof()) {
 				input_1.clear();
+				break;
+			}
 		}
-		In >> ch;
-		In >> input_2;
+		if (input_1 == "")
+			cout << '0';
+		else
+			cout << input_1 << '-';
+		if (!In.eof()) {
+			In >> ch;
+			cout << ch;
+			In >> input_2;
+			cout << input_2;
+		}
+		else {
+			input_2.clear();
+			In >> ch;
+		}
+		if (input_1 == "0")
+			input_1.clear();
 		if (input_2 == "0")
 			input_2.clear();
+
 		F.push_back(FD(input_1, input_2));
+		cout << "\n";
 	}
-	for (int i = 0; i < F.size(); i++)
-	{
+	for (int i = 0; i < F.size(); i++) {
 		F[i].left.shrink_to_fit();
 		F[i].right.shrink_to_fit();
 	}
 	F.shrink_to_fit();
+	cout << "\n\n";
 }
 
 void SX(const string& X, const vector<FD>& F, string& X_plus)
